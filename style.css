@@ -1,0 +1,27 @@
+/* Select the h1 element and set its color to red */
+h1 {
+  color: rgb(20, 26, 16);
+}
+
+/* Select the body element and set its background color to light gray */
+body {
+  background-color: rgb(205, 218, 218);
+}
+
+/* Select the p element and set its font family to Arial */
+p {
+  font-family: Arial;
+}
+
+canvas {
+  border: 1px solid black;
+}
+
+button[id="verander"] {
+  background-color: #e4e4e4;
+  color: #000000;
+  cursor: pointer;
+  position: absolute;
+  top: 80px;
+  left: 10px;
+}
