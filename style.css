@@ -25,3 +25,23 @@ button[id="verander"] {
   top: 80px;
   left: 10px;
 }
+
+button[id="button"] {
+  cursor: pointer;
+  position: absolute;
+  top: 80px;
+  left: 185px;
+}
+
+input[id="text"] {
+  cursor: pointer;
+  position: absolute;
+  top: 80px;
+  left: 10px;
+}
+
+#result {
+  position: absolute;
+  top: 115px;
+  left: 10px;
+}

@@ -107,25 +107,3 @@ document.addEventListener("DOMContentLoaded", () => {
 
   Animate();
 });
-
-function capitalWord(str) {
-  let text = "";
-
-  for (let i = 0; i < str.length; i++) {
-    if (str[i] === " ") {
-      text += " ";
-    } else if (i % 2 === 1) {
-      text += str[i].toUpperCase();
-    } else {
-      text += str[i];
-    }
-  }
-  return text;
-}
-
-console.log(capitalWord("javascripte"));
-console.log(
-  capitalWord(
-    "they fought for our freedom and we will never forget their service"
-  )
-);
