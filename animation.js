@@ -562,6 +562,64 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//object control
+class Character {
+  constructor(xPos, yPos, width, height, speedX, speedY) {
+    this.x = xPos;
+    this.y = yPos;
+    this.w = width;
+    this.h = height;
+    this.speedX = speedX;
+    this.speedY = speedY;
+  }
+
+  update() {}
+
+  draw(context) {
+    context.fillRect(this.x, this.y, this.w, this.h);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  let canvas = document.querySelector("canvas");
+  let context = canvas.getContext("2d");
+  let object = new Character(20, 429, 15, 70, 10, 10);
+
+  console.log(object);
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft" && object.x - object.speedX >= 0) {
+      object.x -= object.speedX;
+    }
+    if (
+      event.key === "ArrowRight" &&
+      object.x + object.w + object.speedX <= 505
+    ) {
+      object.x += object.speedX;
+    }
+    if (event.key === "ArrowUp" && object.y - object.speedY >= -3) {
+      object.y -= object.speedY;
+    }
+    if (
+      event.key === "ArrowDown" &&
+      object.y + object.h + object.speedY <= canvas.height
+    ) {
+      object.y += object.speedY;
+    }
+  });
+
+  function Animate() {
+    //Update
+    object.update();
+    //Clear canvas
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    //draw
+    object.draw(context);
+    //Animate
+    requestAnimationFrame(Animate);
+  }
+
+  Animate();
+});
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
