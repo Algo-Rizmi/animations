@@ -622,6 +622,68 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// function factorial(n) {
+//   return n === 1 ? 1 : n * factorial(n - 1);
+// }
+
+// function factorial(n) {
+//   let result = 1;
+//   for (let i = 2; i <= n; i++) {
+//     result *= i;
+//   }
+//   return result;
+// }
+
+function factorial(n) {
+  function iter(product, counter) {
+    return counter > n ? product : iter(counter * product, counter + 1);
+  }
+  return iter(1, 1);
+}
+
+console.log(factorial(5));
+
+// function fibonacci(n) {
+//   if (n <= 1) {
+//     return n;
+//   } else {
+//     return n + fibonacci(n - 1) + fibonacci(n - 2);
+//   }
+// }
+
+function fibonacci(n) {
+  if (n <= 1) {
+    return n;
+  }
+
+  let prev = 0;
+  let current = 1;
+
+  for (let i = 2; i <= n; i++) {
+    let next = prev + current;
+    prev = current;
+    current = next;
+  }
+  return current;
+}
+
+console.log(fibonacci(20));
+
+function fibonacci(n) {
+  if (n <= 1) {
+    return n;
+  }
+  let prev = 0;
+  let current = 1;
+
+  do {
+    let next = prev + current;
+    prev = current;
+    current = next;
+    n--;
+  } while (n >= 0);
+  return current;
+}
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
