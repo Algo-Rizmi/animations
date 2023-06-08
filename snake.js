@@ -8,7 +8,14 @@ class Character {
     this.speedY = speedY;
   }
 
-  update() {}
+  update() {
+    this.x += this.speedX; // Move horizontally based on speedX
+    this.y += this.speedY; // Move vertically based on speedY
+  }
+
+  increaseWidth() {
+    this.w += 10; // Increase width by 10 pixels
+  }
 
   draw(context) {
     context.fillRect(this.x, this.y, this.w, this.h);
@@ -25,22 +32,7 @@ class Ball {
     this.speedY = speedY;
   }
 
-  update() {
-    this.x += this.speedX;
-    this.y += this.speedY;
-    if (this.x > 500) {
-      this.x = -this.s;
-    }
-    if (this.x < -this.s) {
-      this.x = 500;
-    }
-    if (this.y > 500) {
-      this.y = -this.s;
-    }
-    if (this.y < -this.s) {
-      this.y = 500;
-    }
-  }
+  update() {}
 
   draw(context) {
     context.beginPath();
@@ -52,17 +44,9 @@ class Ball {
 document.addEventListener("DOMContentLoaded", () => {
   let canvas = document.querySelector("canvas");
   let context = canvas.getContext("2d");
-  let object = new Character(20, 429, 80, 10, 10, 10);
+  let object = new Character(20, 429, 80, 10, 2, 2);
   // let box = new Character(200, 200, 50, 50, 4, 4);
-  const ballen = [];
-  ballen.push(new Ball(10, 20, 20, 5, 5));
-  ballen.push(new Ball(10, 20, 20, 5, 5));
-  ballen.push(new Ball(10, 20, 20, 5, 5));
-  ballen.push(new Ball(10, 20, 20, 5, 5));
-  ballen.push(new Ball(10, 20, 20, 5, 5));
-  ballen.push(new Ball(12, 15, 10, 10, 20));
-  ballen.push(new Ball(50, 30, 25, 8, 8));
-
+  let ball = new Ball(300, 300, 12, 10, 3);
   document.addEventListener("keydown", (event) => {
     if (event.key === "ArrowLeft" && object.x - object.speedX >= 0) {
       object.x -= object.speedX;
@@ -84,14 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  document.addEventListener("mousemove", function (event) {
-    let rect = canvas.getBoundingClientRect();
-    let mouseX = event.clientX - rect.left;
-    let mouseY = event.clientY - rect.top;
-    object.x = mouseX - object.w / 2;
-    object.y = mouseY - object.h / 2;
-  });
-
   function Animate() {
     //Update
     object.update();
@@ -99,24 +75,26 @@ document.addEventListener("DOMContentLoaded", () => {
     context.clearRect(0, 0, canvas.width, canvas.height);
     //draw
     object.draw(context);
+    ball.draw(context);
     //Collision Detection
-    for (let i = 0; i < ballen.length; i++) {
-      if (
-        ballen[i].x + ballen[i].s >= object.x &&
-        ballen[i].x - ballen[i].s <= object.x + object.w &&
-        ballen[i].y + ballen[i].s >= object.y &&
-        ballen[i].y - ballen[i].s <= object.y + object.h
-      ) {
-        ballen[i].speedY *= -1;
-      }
-
-      //Ballen update en draw
-      ballen[i].update();
-      ballen[i].draw(context);
+    if (
+      ball.x + ball.s >= object.x &&
+      ball.x - ball.s <= object.x + object.w &&
+      ball.y + ball.s >= object.y &&
+      ball.y - ball.s <= object.y + object.h
+    ) {
+      object.increaseWidth();
+      randomFood();
     }
-
+    //Ballen update en draw
+    ball.update();
     //Animate
     requestAnimationFrame(Animate);
+  }
+
+  function randomFood() {
+    ball.x = Math.random() * (canvas.width - ball.s);
+    ball.y = Math.random() * (canvas.height - ball.s);
   }
 
   Animate();
