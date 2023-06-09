@@ -121,3 +121,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   Animate();
 });
+
+document.addEventListener("keyup", (event) => {
+  if (event.key === "ArrowLeft" && object.x - object.speedX >= 0) {
+    object.x -= object.speedX;
+  }
+  if (
+    event.key === "ArrowRight" &&
+    object.x + object.w + object.speedX <= 505
+  ) {
+    object.x += object.speedX;
+  }
+  if (event.key === "ArrowUp" && object.y - object.speedY >= -3) {
+    object.y -= object.speedY;
+  }
+  if (
+    event.key === "ArrowDown" &&
+    object.y + object.h + object.speedY <= canvas.height
+  ) {
+    object.y += object.speedY;
+  }
+});

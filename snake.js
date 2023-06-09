@@ -6,20 +6,16 @@ class Character {
     this.h = height;
     this.speedX = speedX;
     this.speedY = speedY;
+    this.snakeBody = [{ x: this.x, y: this.y }];
   }
 
-  update() {
-    this.x += this.speedX; // Move horizontally based on speedX
-    this.y += this.speedY; // Move vertically based on speedY
-  }
-
-  increaseWidth() {
-    this.w += 10; // Increase width by 10 pixels
-  }
+  update() {}
 
   draw(context) {
-    context.fillRect(this.x, this.y, this.w, this.h);
-    context.fillStyle = "black";
+    context.fillStyle = "blue";
+    for (let segment of this.snakeBody) {
+      context.fillRect(segment.x, segment.y, this.w, this.h);
+    }
   }
 }
 
@@ -44,33 +40,69 @@ class Ball {
 document.addEventListener("DOMContentLoaded", () => {
   let canvas = document.querySelector("canvas");
   let context = canvas.getContext("2d");
-  let object = new Character(20, 429, 80, 10, 2, 2);
-  // let box = new Character(200, 200, 50, 50, 4, 4);
-  let ball = new Ball(300, 300, 12, 10, 3);
+  let object = new Character(20, 429, 10, 10, 5, 5);
+  let ball = new Ball(0, 0, 15, 12, 10);
+  let direction = null;
+
   document.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowLeft" && object.x - object.speedX >= 0) {
-      object.x -= object.speedX;
-    }
+    const directions = {
+      ArrowLeft: "left",
+      ArrowRight: "right",
+      ArrowUp: "up",
+      ArrowDown: "down",
+    };
+
     if (
-      event.key === "ArrowRight" &&
-      object.x + object.w + object.speedX <= 505
+      directions[event.key] &&
+      direction !== oppositeDirection(directions[event.key])
     ) {
-      object.x += object.speedX;
-    }
-    if (event.key === "ArrowUp" && object.y - object.speedY >= -3) {
-      object.y -= object.speedY;
-    }
-    if (
-      event.key === "ArrowDown" &&
-      object.y + object.h + object.speedY <= canvas.height
-    ) {
-      object.y += object.speedY;
+      direction = directions[event.key];
     }
   });
 
+  function oppositeDirection(dir) {
+    const opposites = {
+      left: "right",
+      right: "left",
+      up: "down",
+      down: "up",
+    };
+    return opposites[dir] || null;
+  }
+
+  function update() {
+    const { x, y, speedX, speedY, w, h } = object;
+
+    switch (direction) {
+      case "left":
+        object.x = x - speedX >= 0 ? x - speedX : x;
+        break;
+
+      case "right":
+        object.x = x + w + speedX <= 505 ? x + speedX : x;
+        break;
+
+      case "up":
+        object.y = y - speedY >= -3 ? y - speedY : y;
+        break;
+
+      case "down":
+        object.y = y + h + speedY <= canvas.height ? y + speedY : y;
+        break;
+    }
+    // Update snake's body segments
+    const newSegment = { x: object.x, y: object.y };
+    object.snakeBody.unshift(newSegment);
+    object.snakeBody.pop();
+  }
+
   function Animate() {
     //Update
-    object.update();
+    update();
+    //random Ball postion
+    if (ball.x == 0 && ball.y == 0) {
+      randomFood();
+    }
     //Clear canvas
     context.clearRect(0, 0, canvas.width, canvas.height);
     //draw
@@ -83,9 +115,10 @@ document.addEventListener("DOMContentLoaded", () => {
       ball.y + ball.s >= object.y &&
       ball.y - ball.s <= object.y + object.h
     ) {
-      object.increaseWidth();
       randomFood();
+      addSegmentToSnake();
     }
+
     //Ballen update en draw
     ball.update();
     //Animate
@@ -95,6 +128,11 @@ document.addEventListener("DOMContentLoaded", () => {
   function randomFood() {
     ball.x = Math.random() * (canvas.width - ball.s);
     ball.y = Math.random() * (canvas.height - ball.s);
+  }
+
+  function addSegmentToSnake() {
+    const lastSegment = object.snakeBody[object.snakeBody.length - 1];
+    object.snakeBody.push({ x: lastSegment.x, y: lastSegment.y });
   }
 
   Animate();
