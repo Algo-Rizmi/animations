@@ -41,8 +41,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let canvas = document.querySelector("canvas");
   let context = canvas.getContext("2d");
   let object = new Character(20, 429, 10, 10, 5, 5);
-  let ball = new Ball(0, 0, 15, 12, 10);
+  let ball = new Ball(0, 0, 30, 12, 10);
   let direction = null;
+  let gameOver = false;
 
   document.addEventListener("keydown", (event) => {
     const directions = {
@@ -94,6 +95,27 @@ document.addEventListener("DOMContentLoaded", () => {
     const newSegment = { x: object.x, y: object.y };
     object.snakeBody.unshift(newSegment);
     object.snakeBody.pop();
+
+    //Gameover funciton
+    if (
+      object.x - object.speedX < 0 ||
+      object.x + object.w + object.speedX > 505 ||
+      object.y - object.speedY < -3 ||
+      object.y + object.h + object.speedY > 505
+    ) {
+      gameOver = true;
+      alert("Game Over");
+    }
+
+    for (let i = 1; i < object.snakeBody.length; i++) {
+      if (
+        object.x == object.snakeBody[i].x &&
+        object.y == object.snakeBody[i].y
+      ) {
+        gameOver = true;
+        alert("Game Over");
+      }
+    }
   }
 
   function Animate() {
