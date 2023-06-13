@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let canvas = document.querySelector("canvas");
   let context = canvas.getContext("2d");
   let object = new Character(20, 429, 10, 10, 5, 5);
-  let ball = new Ball(0, 0, 30, 12, 10);
+  let ball = new Ball(0, 0, 10, 12, 10);
   let direction = null;
   let gameOver = false;
 
@@ -80,11 +80,11 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
 
       case "right":
-        object.x = x + w + speedX <= 505 ? x + speedX : x;
+        object.x = x + w + speedX <= canvas.width ? x + speedX : x;
         break;
 
       case "up":
-        object.y = y - speedY >= -3 ? y - speedY : y;
+        object.y = y - speedY >= 0 ? y - speedY : y;
         break;
 
       case "down":
@@ -99,12 +99,11 @@ document.addEventListener("DOMContentLoaded", () => {
     //Gameover funciton
     if (
       object.x - object.speedX < 0 ||
-      object.x + object.w + object.speedX > 505 ||
-      object.y - object.speedY < -3 ||
-      object.y + object.h + object.speedY > 505
+      object.x + object.w + object.speedX > canvas.width ||
+      object.y - object.speedY < 0 ||
+      object.y + object.h + object.speedY > canvas.height
     ) {
-      gameOver = true;
-      alert("Game Over");
+      endGame();
     }
 
     for (let i = 1; i < object.snakeBody.length; i++) {
@@ -112,9 +111,26 @@ document.addEventListener("DOMContentLoaded", () => {
         object.x == object.snakeBody[i].x &&
         object.y == object.snakeBody[i].y
       ) {
-        gameOver = true;
-        alert("Game Over");
+        endGame();
       }
+    }
+    function endGame() {
+      if (gameOver) return; // Don't do anything if the game is already over
+
+      gameOver = true; // Set gameOver to true, this will prevent the endGame function from executing more than once
+
+      canvas.style.display = "none";
+
+      const gameOverImage = new Image();
+      gameOverImage.src = "maze_resized.jpg";
+      gameOverImage.style.display = "block";
+      gameOverImage.style.margin = "0 auto";
+
+      document.body.appendChild(gameOverImage);
+
+      // Sound Game Over
+      const gameOverSound = new Audio("scream.mp3");
+      gameOverSound.play();
     }
   }
 
@@ -127,6 +143,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     //Clear canvas
     context.clearRect(0, 0, canvas.width, canvas.height);
+    //Canvas color
+    context.fillStyle = "white";
+    context.fillRect(0, 0, canvas.width, canvas.height);
     //draw
     object.draw(context);
     ball.draw(context);

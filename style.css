@@ -5,7 +5,7 @@ h1 {
 
 /* Select the body element and set its background color to light gray */
 body {
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(109, 109, 109);
 }
 
 /* Select the p element and set its font family to Arial */
@@ -14,7 +14,7 @@ p {
 }
 
 canvas {
-  border: 1px solid rgb(0, 0, 0);
+  border: 25px solid rgb(0, 0, 0);
   position: absolute;
   top: 100px;
   left: 600px;
